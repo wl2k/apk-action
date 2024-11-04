@@ -1,4 +1,4 @@
-name: APK release
+name: APK action
 description: Build a signed, release-ready APK.
 
 branding:
@@ -7,7 +7,7 @@ branding:
 
 inputs:
   keystore:
-    description: The keystore file in base64 encoded format
+    description: The keystore file, encoded in base64
     required: true
   keystore-password:
     description: The password of the keystore file
@@ -23,10 +23,9 @@ inputs:
   java-version:
     description: The Java version to set up
     default: "17"
-
   gradle-args:
     description: The arguments passed to Gradle
-    default: "--no-daemon"
+    default: --no-daemon
 
 runs:
   using: composite

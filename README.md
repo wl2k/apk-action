@@ -1,46 +1,53 @@
-# Build signed APK
+# APK action
 
-Build a signed APK of your Android application
+A GitHub action for build a signed, release-ready APK.
 
-> **Warning**  
-> This action only works on Ubuntu
+> Based on [victorbnl/build-signed-apk](https://github.com/victorbnl/build-signed-apk)
 
 ## Inputs
 
-### Either required
-
-- `keystore_b64`: The _contents of_ the keystore file (.jks), encoded as base64. You can generate it on Linux by running `base64 keystore.jks`.
-
-- `keystore_file`: The path to the keystore file (.jks). Using it is a security issue as it requires to have your keystore file in your repository. Instead please use `keystore_b64`, which allows you to have your keystore as a GitHub secret.
-
-### Required
-
-- `keystore_password`: Your keystore’s password.
-
-- `key_alias`: Your key’s alias.
-
-- `key_password`: Your key’s password.
-
-### Optionnal
-
-- `gradlew_dir`: Gradlew file directory (default: `.`).
-
-- `java_version`: Java version to use (can be `8`, `11` or `17`; default: `11`).
+| name              | description                                                 | required              |
+| ----------------- | ----------------------------------------------------------- | --------------------- |
+| keystore          | The content of the keystore file (.jks), encoded in base64. | true                  |
+| keystore-password | The password of your keystore                               | true                  |
+| key-alias         | Your key’s alias                                            | true                  |
+| key-password      | Your key’s password                                         | true                  |
+| java-version      | The Java version to set up                                  | false (`17`)          |
+| gradle-args       | The arguments passed to Gradle                              | false (`--no-daemon`) |
 
 ## Example
 
-```yaml
-- name: Build Signed APK
-  uses: victorbnl/build-signed-apk@main
+```yml
+- name: APK
+  uses: waterlemons2k/apk-action@main
   with:
-    keystore_b64: ${{ secrets.keystore }}
-    keystore_password: ${{ secrets.keystore_password }}
-    key_alias: ${{ secrets.key_alias }}
-    key_password: ${{ secrets.key_password }}
+    keystore: ${{ secrets.KEYSTORE }}
+    keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
+    key-alias: ${{ secrets.KEY_ALIAS }}
+    key-password: ${{ secrets.KEY_PASSWORD }}
 ```
 
-## Get your APK
+## The APK
 
-Your APK file is built at the default location, that is: `app/build/outputs/apk/release/app-release.apk`.
+Default location of the APK: `app/build/outputs/apk/release/app-release.apk`.
 
-Now you can do what you want with the APK file, like creating a release or uploading it as an artifact.
+### Follow-up
+
+You can do whatever you want with the APK, such as release it:
+
+```yml
+- uses: softprops/action-gh-release@v1
+  with:
+    files: app/build/outputs/apk/release
+```
+
+or upload it as an artifact:
+
+```yml
+- uses: actions/upload-artifact@v3
+  with:
+    name: APK
+    path: app/build/outputs/apk/release
+```
+
+Enjoy it!
