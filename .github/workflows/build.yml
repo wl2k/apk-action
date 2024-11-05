@@ -9,8 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: wl2k/release-apk@main
+      - uses: wl2k/apk-action@main
         with:
           keystore: ${{ secrets.KEYSTORE }}
           keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
