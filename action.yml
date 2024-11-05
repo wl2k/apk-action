@@ -7,16 +7,16 @@ branding:
 
 inputs:
   keystore:
-    description: The keystore file, encoded in base64
+    description: Contents of the keystore file (.jks), base64 encoded
     required: true
   keystore-password:
-    description: The password of the keystore file
+    description: Password of the keystore
     required: true
   key-alias:
-    description: The key alias
+    description: Alias of the key
     required: true
   key-password:
-    description: The password for the key
+    description: Password of the key
     required: true
 
   # https://developer.android.com/build/releases/gradle-plugin?hl=en#compatibility
@@ -36,14 +36,19 @@ runs:
         java-version: ${{ inputs.java-version }}
         cache: gradle
 
+    - shell: sh
+      env:
+        TMPDIR: ${{ runner.temp }}
+      run: echo "KEYSTORE_PATH=$(mktemp)" >>"$GITHUB_OUTPUT"
+
     - shell: node {0}
       run: |
-        //Decode keystore
+        //Decode keystore to file
         require('fs').writeFileSync(
-          '${{ runner.temp }}/.jks',
+          '${{ env.KEYSTORE_PATH }}',
           '${{ inputs.keystore }}',
           'base64'
-        );
+        )
 
     - shell: sh
       run: |
@@ -51,7 +56,7 @@ runs:
         chmod +x ./gradlew
 
         ./gradlew assembleRelease $GRADLE_ARGS \
-          -Pandroid.injected.signing.store.file='${{ runner.temp }}/.jks' \
+          -Pandroid.injected.signing.store.file='${{ env.KEYSTORE_PATH }}' \
           -Pandroid.injected.signing.store.password='${{ inputs.keystore-password }}' \
           -Pandroid.injected.signing.key.alias='${{ inputs.key-alias }}' \
           -Pandroid.injected.signing.key.password='${{ inputs.key-password }}'
