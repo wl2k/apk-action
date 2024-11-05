@@ -39,7 +39,7 @@ runs:
     - shell: sh
       env:
         TMPDIR: ${{ runner.temp }}
-      run: echo "KEYSTORE_PATH=$(mktemp)" >>"$GITHUB_OUTPUT"
+      run: echo "KEYSTORE_PATH=$(mktemp)" >>"$GITHUB_ENV"
 
     - shell: node {0}
       run: |
