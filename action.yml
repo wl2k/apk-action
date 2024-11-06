@@ -30,6 +30,13 @@ inputs:
 runs:
   using: composite
   steps:
+    - shell: sh
+      env:
+        TMPDIR: ${{ runner.temp }}
+      run: echo "KEYSTORE_PATH=$(mktemp).jks" >>"$GITHUB_ENV"
+    - shell: sh
+      run: $GITHUB_ACTION_PATH/keystore.js '${{ inputs.keystore }}'
+
     - uses: actions/setup-java@v4
       with:
         distribution: temurin
@@ -37,21 +44,12 @@ runs:
         cache: gradle
 
     - shell: sh
-      env:
-        TMPDIR: ${{ runner.temp }}
-      run: echo "KEYSTORE_PATH=$(mktemp)" >>"$GITHUB_ENV"
-
-    - shell: sh
-      working-directory: ${{ github.action_path }}
-      run: ./keystore.js '${{ inputs.keystore }}'
-
-    - shell: sh
       run: |
         #Release APK
         chmod +x ./gradlew
 
         ./gradlew assembleRelease $GRADLE_ARGS \
-          -Pandroid.injected.signing.store.file='${{ env.KEYSTORE_PATH }}' \
+          -Pandroid.injected.signing.store.file="$KEYSTORE_PATH" \
           -Pandroid.injected.signing.store.password='${{ inputs.keystore-password }}' \
           -Pandroid.injected.signing.key.alias='${{ inputs.key-alias }}' \
           -Pandroid.injected.signing.key.password='${{ inputs.key-password }}'
