@@ -35,7 +35,7 @@ runs:
         TMPDIR: ${{ runner.temp }}
       run: echo "KEYSTORE_PATH=$(mktemp).jks" >>"$GITHUB_ENV"
     - shell: sh
-      run: $GITHUB_ACTION_PATH/keystore.js '${{ inputs.keystore }}'
+      run: ${{ github.action_path }}/keystore.js '${{ inputs.keystore }}'
 
     - uses: actions/setup-java@v4
       with:
