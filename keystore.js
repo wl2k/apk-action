@@ -1,4 +1,4 @@
-#!/usr/bin/node
+#!/usr/local/bin/node
 
 require('fs').writeFileSync(
   process.env.KEYSTORE_PATH,
