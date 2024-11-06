@@ -1,5 +1,5 @@
 name: APK action
-description: Build a signed, release-ready APK.
+description: Build a signed, release-ready APK with GitHub Actions
 
 branding:
   icon: package
@@ -22,7 +22,7 @@ inputs:
   # https://developer.android.com/build/releases/gradle-plugin?hl=en#compatibility
   java-version:
     description: The Java version to set up
-    default: "17"
+    default: '17'
   gradle-args:
     description: The arguments passed to Gradle
     default: --no-daemon
@@ -41,14 +41,8 @@ runs:
         TMPDIR: ${{ runner.temp }}
       run: echo "KEYSTORE_PATH=$(mktemp)" >>"$GITHUB_ENV"
 
-    - shell: node {0}
-      run: |
-        //Decode keystore to file
-        require('fs').writeFileSync(
-          '${{ env.KEYSTORE_PATH }}',
-          '${{ inputs.keystore }}',
-          'base64'
-        )
+    - shell: sh
+      run: ./keystore.js '${{ inputs.keystore }}'
 
     - shell: sh
       run: |
