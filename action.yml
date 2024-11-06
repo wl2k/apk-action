@@ -42,6 +42,7 @@ runs:
       run: echo "KEYSTORE_PATH=$(mktemp)" >>"$GITHUB_ENV"
 
     - shell: sh
+      working-directory: ${{ github.action_path }}
       run: ./keystore.js '${{ inputs.keystore }}'
 
     - shell: sh
