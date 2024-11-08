@@ -4,28 +4,29 @@ Build a signed, release-ready APK with GitHub Actions.
 
 > Based on [victorbnl/build-signed-apk](https://github.com/victorbnl/build-signed-apk)
 
-## Example
+## Usage
 
 ```yml
-- name: APK
-  uses: WaterLemons2k/apk-action@main
+- uses: WaterLemons2k/apk-action@main
   with:
+    # Contents of the keystore file (.jks), base64 encoded
     keystore: ${{ secrets.KEYSTORE }}
+    # Password of the keystore
     keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
+    # Alias of the key
     key-alias: ${{ secrets.KEY_ALIAS }}
+    # Password of the key
     key-password: ${{ secrets.KEY_PASSWORD }}
+
+    # Optioanl
+    #
+    # The Java version to set up
+    # Default: see [action.yml](action.yml)
+    java-version: ''
+    # The arguments passed to Gradle
+    # Default: '--no-daemon'
+    gradle-args: ''
 ```
-
-## Inputs
-
-| name              | description                                          | required              |
-| ----------------- | ---------------------------------------------------- | --------------------- |
-| keystore          | Contents of the keystore file (.jks), base64 encoded | true                  |
-| keystore-password | Password of the keystore                             | true                  |
-| key-alias         | Alias of the key                                     | true                  |
-| key-password      | Password of the key                                  | true                  |
-| java-version      | The Java version to set up                           | false (`17`)          |
-| gradle-args       | The arguments passed to Gradle                       | false (`--no-daemon`) |
 
 ## The APK
 

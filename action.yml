@@ -19,10 +19,8 @@ inputs:
     description: Password of the key
     required: true
 
-  # https://developer.android.com/build/releases/gradle-plugin?hl=en#compatibility
   java-version:
     description: The Java version to set up
-    default: '17'
   gradle-args:
     description: The arguments passed to Gradle
     default: --no-daemon
@@ -31,17 +29,23 @@ runs:
   using: composite
   steps:
     - shell: sh
-      env:
-        TMPDIR: ${{ runner.temp }}
-      run: echo "KEYSTORE_PATH=$(mktemp).jks" >>"$GITHUB_ENV"
+      run: |
+        { #define env
+          echo "KEYSTORE_PATH=$(mktemp -p ${{ runner.temp }}).jks"
+
+          echo "JAVA_VERSION=${{
+            inputs.java-version ||
+            $(curl -L https://github.com/WaterLemons2k/gradle-minimum/raw/main/version/java)
+          }}"
+        } >>"$GITHUB_ENV"
+
     - shell: sh
       working-directory: ${{ github.action_path }}
-      run: ./keystore.js '${{ inputs.keystore }}'
-
+      run: ./decode-keystore.js '${{ inputs.keystore }}'
     - uses: actions/setup-java@v4
       with:
         distribution: temurin
-        java-version: ${{ inputs.java-version }}
+        java-version: ${{ env.JAVA_VERSION || '17' }}
         cache: gradle
 
     - shell: sh
