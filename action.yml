@@ -35,7 +35,7 @@ runs:
 
           echo "JAVA_VERSION=${{
             inputs.java-version ||
-            '$(curl -L https://github.com/WaterLemons2k/gradle-minimum/raw/main/version/java)'
+            '$(curl -Ls https://github.com/WaterLemons2k/gradle-minimum/raw/main/version/java)'
           }}"
         } >>"$GITHUB_ENV"
 
@@ -45,7 +45,7 @@ runs:
     - uses: actions/setup-java@v4
       with:
         distribution: temurin
-        java-version: ${{ env.JAVA_VERSION || '17' }}
+        java-version: ${{ env.JAVA_VERSIONs || 17 }}
         cache: gradle
 
     - shell: sh
