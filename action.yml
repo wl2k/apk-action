@@ -31,7 +31,7 @@ runs:
     - shell: sh
       run: |
         { #define env
-          echo "KEYSTORE_PATH=$(mktemp -p ${{ runner.temp }}).jks"
+          echo "KEYSTORE_PATH=$(mktemp -up "$RUNNER_TEMP").jks"
 
           echo "JAVA_VERSION=${{
             inputs.java-version ||
