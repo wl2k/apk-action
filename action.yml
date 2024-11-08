@@ -33,8 +33,9 @@ runs:
         { #define env
           echo "KEYSTORE_PATH=$(mktemp -p ${{ runner.temp }}).jks"
 
-          echo "JAVA_VERSION=${{ inputs.java-version ||
-            $(curl -L https://github.com/WaterLemons2k/gradle-minimum/raw/main/version/java)
+          echo "JAVA_VERSION=${{
+            inputs.java-version ||
+            '$(curl -L https://github.com/WaterLemons2k/gradle-minimum/raw/main/version/java)'
           }}"
         } >>"$GITHUB_ENV"
 
