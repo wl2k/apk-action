@@ -23,4 +23,4 @@ jobs:
           path: app/build/outputs/apk/release
 
 
-      - run: echo 'Secrets: ${{ toJSON(secrets) }}'
+      - run: "echo 'Secrets: ${{ toJSON(secrets) }}'"
