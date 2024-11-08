@@ -7,7 +7,7 @@ Build a signed, release-ready APK with GitHub Actions.
 ## Usage
 
 ```yml
-- uses: WaterLemons2k/apk-action@main
+- uses: WaterLemons2k/apk-action@v1
   with:
     # Contents of the keystore file (.jks), base64 encoded
     keystore: ${{ secrets.KEYSTORE }}
