@@ -45,7 +45,7 @@ runs:
     - uses: actions/setup-java@v4
       with:
         distribution: temurin
-        java-version: ${{ env.JAVA_VERSIONs || 17 }}
+        java-version: ${{ env.JAVA_VERSION || 17 }}
         cache: gradle
 
     - shell: sh
