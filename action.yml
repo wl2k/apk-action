@@ -1,0 +1,60 @@
+name: APK action
+description: Build a signed, release-ready APK with GitHub Actions
+
+branding:
+  icon: package
+  color: red
+
+inputs:
+  keystore:
+    description: Contents of the keystore file (.jks), base64 encoded
+    required: true
+  keystore-password:
+    description: Password of the keystore
+    required: true
+  key-alias:
+    description: Alias of the key
+    required: true
+  key-password:
+    description: Password of the key
+    required: true
+
+  java-version:
+    description: The Java version to set up
+  gradle-args:
+    description: The arguments passed to Gradle
+    default: --no-daemon
+
+runs:
+  using: composite
+  steps:
+    - shell: sh
+      run: |
+        { #define env
+          echo "KEYSTORE_PATH=$(mktemp -up "$RUNNER_TEMP").jks"
+          echo "JAVA_VERSION=${{
+            inputs.java-version ||
+            '$(curl -Ls github.com/WaterLemons2k/gradle-minimum/raw/main/version/java)'
+          }}"
+        } >>"$GITHUB_ENV"
+
+    - shell: sh
+      working-directory: ${{ github.action_path }}
+      run: ./decode-keystore.js '${{ inputs.keystore }}'
+    - uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: ${{ env.JAVA_VERSION || 17 }}
+        cache: gradle
+
+    - shell: sh
+      env:
+        GRADLE_ARGS: ${{ inputs.gradle-args }}
+      run: >
+        #Release APK
+
+        chmod +x ./gradlew && ./gradlew assembleRelease $GRADLE_ARGS
+        -Pandroid.injected.signing.store.file="$KEYSTORE_PATH"
+        -Pandroid.injected.signing.store.password='${{ inputs.keystore-password }}'
+        -Pandroid.injected.signing.key.alias='${{ inputs.key-alias }}'
+        -Pandroid.injected.signing.key.password='${{ inputs.key-password }}'
