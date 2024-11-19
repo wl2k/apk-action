@@ -21,7 +21,7 @@ Build a signed, release-ready APK with GitHub Actions
     # Optioanl
     #
     # The Java version to set up
-    # Default: see `action.yml`
+    # Default: see `src/java-version.js`
     java-version: ''
     # The arguments passed to Gradle
     # Default: '--no-daemon'

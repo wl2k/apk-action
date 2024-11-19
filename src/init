@@ -1,0 +1,22 @@
+#!/usr/local/bin/node
+// @ts-check
+
+import fs from 'fs';
+
+import core from './actions/core.js';
+import defineEnv from './env.js';
+
+/**
+ * Write the `keystore` input (base64 encoded) to `path`.
+ *
+ * @param {string} path The path to write the keystore to
+ */
+function decodeKeystore(path) {
+  fs.writeFileSync(path, core.getInput('keystore'), 'base64');
+}
+
+function init() {
+  const { keystorePath } = defineEnv();
+  decodeKeystore(keystorePath);
+}
+init();

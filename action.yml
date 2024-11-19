@@ -29,18 +29,12 @@ runs:
   using: composite
   steps:
     - shell: sh
-      run: |
-        { #define env
-          echo "KEYSTORE_PATH=$(mktemp -up "$RUNNER_TEMP").jks"
-          echo "JAVA_VERSION=${{
-            inputs.java-version ||
-            '$(curl -Ls github.com/WaterLemons2k/gradle-minimum/raw/main/version/java)'
-          }}"
-        } >>"$GITHUB_ENV"
-
-    - shell: sh
+      env:
+        INPUT_KEYSTORE: ${{ inputs.keystore }}
+        INPUT_JAVA_VERSION: ${{ inputs.java-version }}
       working-directory: ${{ github.action_path }}
-      run: ./decode-keystore.js '${{ inputs.keystore }}'
+      run: ./src/init
+
     - uses: actions/setup-java@v4
       with:
         distribution: temurin
