@@ -17,6 +17,7 @@ jobs:
           keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
           key-alias: ${{ secrets.KEY_ALIAS }}
           key-password: ${{ secrets.KEY_PASSWORD }}
+          release: false
 
       - uses: actions/upload-artifact@v5
         with:
