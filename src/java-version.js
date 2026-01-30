@@ -8,7 +8,9 @@ const URL =
 async function fetchJavaVersion() {
   const r = await fetch(URL);
   if (!r.ok) {
-    core.warning(`Failed to fetch Java version from ${URL}: ${r.statusText}`);
+    core.warning(
+      `Failed to fetch Java version from '${URL}': ${r.statusText}. Use default Java version.`
+    );
     return '';
   }
   return r.text();

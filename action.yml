@@ -33,7 +33,7 @@ runs:
         INPUT_KEYSTORE: ${{ inputs.keystore }}
         INPUT_JAVA_VERSION: ${{ inputs.java-version }}
       working-directory: ${{ github.action_path }}
-      run: ./src/init
+      run: ./init
 
     - uses: actions/setup-java@v4
       with:

@@ -1,0 +1,57 @@
+#!/usr/local/bin/node
+// @ts-check
+
+import cp from 'child_process';
+import fs from 'fs';
+
+import core from './src/actions/core.js';
+import defineEnv from './src/env.js';
+
+/**
+ * Write the `keystore` input (base64-encoded) to `path`.
+ *
+ * @param {string} path The path to write the keystore to
+ */
+function writeKeystore(path) {
+  fs.writeFileSync(path, core.getInput('keystore'), 'base64');
+}
+
+/**
+ * Check whether the keystore at `path` is valid.
+ *
+ * @param {string} path The path to the keystore
+ * @returns {boolean} Whether the keystore is valid
+ */
+function checkKeystore(path) {
+  const result = cp.spawnSync('keytool', [
+    '-J-Duser.language=en', // force English output
+    '-list',
+    '-protected', // to avoid prompting for password
+    '-keystore',
+    path
+  ]);
+  if (result.error) {
+    core.error(`Failed to execute \`keytool\`: ${result.error.message}`);
+    console.error(result.error);
+    return false;
+  }
+  if (result.status) {
+    core.error(
+      `The 'keystore' input is invalid. Please ensure it's Base64-encoded, and cannot be a file path.
+${result.stdout.toString()}`
+    );
+    return false;
+  }
+
+  core.debug(`Keystore valid: ${JSON.stringify(result.stdout.toString())}`);
+  return true;
+}
+
+function init() {
+  const { keystorePath } = defineEnv();
+  core.debug(`Writing keystore to ${keystorePath}`);
+
+  writeKeystore(keystorePath);
+  checkKeystore(keystorePath);
+}
+init();
