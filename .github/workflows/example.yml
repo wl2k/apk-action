@@ -16,7 +16,7 @@ jobs:
           key-alias: ${{ secrets.KEY_ALIAS }}
           key-password: ${{ secrets.KEY_PASSWORD }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: apk
           path: app/build/outputs/apk/release/*.apk
