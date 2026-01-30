@@ -9,11 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
-      - uses: actions/checkout@main
         with:
           ref: example
-          clean: false
-      - uses: ./
+      - uses: wl2k/apk-action@main
         with:
           keystore: ${{ secrets.KEYSTORE }}
           keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
