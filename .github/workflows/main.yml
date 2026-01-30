@@ -9,8 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
+      - uses: actions/checkout@main
         with:
           ref: example
+          clean: false
       - uses: ./
         with:
           keystore: ${{ secrets.KEYSTORE }}
