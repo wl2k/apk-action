@@ -51,7 +51,7 @@ runs:
         #Build APK
 
         chmod +x ./gradlew && ./gradlew
-        ${{ inputs.release && 'assembleRelease' || 'assembleDebug' }}
+        ${{ inputs.release == 'true' && 'assembleRelease' || 'assembleDebug' }}
         $GRADLE_ARGS
         -Pandroid.injected.signing.store.file="$KEYSTORE_PATH"
         -Pandroid.injected.signing.store.password='${{ inputs.keystore-password }}'
