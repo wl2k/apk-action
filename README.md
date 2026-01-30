@@ -1,6 +1,6 @@
 # APK action
 
-Build a signed, release-ready APK with GitHub Actions
+Build a signed, release-ready, or debug APKs with GitHub Actions
 
 > Based on [victorbnl/build-signed-apk](https://github.com/victorbnl/build-signed-apk)
 
@@ -26,6 +26,9 @@ Build a signed, release-ready APK with GitHub Actions
     # The arguments passed to Gradle
     # Default: '--no-daemon'
     gradle-args: ''
+    # Whether to build a release or debug APK
+    # Default: 'true'
+    release: true
 ```
 
 ## The APK
@@ -45,7 +48,7 @@ Now you can do whatever you want with the APK, such as release it:
 or upload it as an artifact:
 
 ```yml
-- uses: actions/upload-artifact@v4
+- uses: actions/upload-artifact@v6
   with:
     name: APK
     path: app/build/outputs/apk/release/*.apk
