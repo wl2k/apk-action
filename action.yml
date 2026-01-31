@@ -53,7 +53,7 @@ runs:
         chmod +x ./gradlew && ./gradlew
         ${{ inputs.release == 'true' && 'assembleRelease' || 'assembleDebug' }}
         $GRADLE_ARGS
-        -Pandroid.injected.signing.store.file="$KEYSTORE_PATH"
+        ${{ inputs.release == 'true' && '-Pandroid.injected.signing.store.file="$KEYSTORE_PATH"' }}
         -Pandroid.injected.signing.store.password='${{ inputs.keystore-password }}'
         -Pandroid.injected.signing.key.alias='${{ inputs.key-alias }}'
         -Pandroid.injected.signing.key.password='${{ inputs.key-password }}'
